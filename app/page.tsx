@@ -44,6 +44,33 @@ export default function BettingCalculator() {
   const [profitIfBack, setProfitIfBack] = useState(0);
   const [profitIfLay, setProfitIfLay] = useState(0);
 
+  // Apply background styles to ensure full coverage
+  useEffect(() => {
+    // Apply styles to html and body
+    document.documentElement.style.backgroundColor = "#0f172a";
+    document.documentElement.style.margin = "0";
+    document.documentElement.style.padding = "0";
+    document.documentElement.style.minHeight = "100%";
+    
+    document.body.style.backgroundColor = "#0f172a";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0";
+    document.body.style.minHeight = "100vh";
+    
+    // Cleanup function
+    return () => {
+      document.documentElement.style.backgroundColor = "";
+      document.documentElement.style.margin = "";
+      document.documentElement.style.padding = "";
+      document.documentElement.style.minHeight = "";
+      
+      document.body.style.backgroundColor = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.minHeight = "";
+    };
+  }, []);
+
   // Matched betting calculations
   useEffect(() => {
     if (activeTab === "backLay") {
@@ -480,379 +507,381 @@ export default function BettingCalculator() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.tabBar}>
-        <button 
-          style={activeTab === "backLay" ? {...styles.tab, ...styles.activeTab} : styles.tab}
-          onClick={() => setActiveTab("backLay")}
-        >
-          Back/Lay
-        </button>
-        <button 
-          style={activeTab === "dutch" ? {...styles.tab, ...styles.activeTab} : styles.tab}
-          onClick={() => setActiveTab("dutch")}
-        >
-          Dutch Betting
-        </button>
-        <button 
-          style={activeTab === "threeWay" ? {...styles.tab, ...styles.activeTab} : styles.tab}
-          onClick={() => setActiveTab("threeWay")}
-        >
-          Three-Way Dutch
-        </button>
-      </div>
-
-      {activeTab === "backLay" && (
-        <div style={styles.card}>
-          <div style={styles.tabBar}>
-            <button 
-              style={type === "qualifier" ? {...styles.tab, ...styles.activeTab} : styles.tab}
-              onClick={() => setType("qualifier")}
-            >
-              Mug / Qualifier
-            </button>
-            <button 
-              style={type === "snr" ? {...styles.tab, ...styles.activeTab} : styles.tab}
-              onClick={() => setType("snr")}
-            >
-              SNR Bonus
-            </button>
-            <button 
-              style={type === "sr" ? {...styles.tab, ...styles.activeTab} : styles.tab}
-              onClick={() => setType("sr")}
-            >
-              SR Bonus
-            </button>
-          </div>
-
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Back Stake</label>
-            <input 
-              type="number" 
-              value={backStake} 
-              onChange={(e) => setBackStake(e.target.value)} 
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Back Odds</label>
-            <input 
-              type="number" 
-              value={backOdds} 
-              onChange={(e) => setBackOdds(e.target.value)} 
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Lay Odds</label>
-            <input 
-              type="number" 
-              value={layOdds} 
-              onChange={(e) => setLayOdds(e.target.value)} 
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Exchange Commission (%)</label>
-            <input 
-              type="number" 
-              value={commission} 
-              onChange={(e) => setCommission(e.target.value)} 
-              style={styles.input}
-            />
-          </div>
-
-          <div style={styles.resultCard}>
-            <p>
-              <strong>Lay Stake:</strong> {lay ? lay.toFixed(2) : "0.00"}
-              <button style={styles.copyButton}><Copy size={16} /></button>
-            </p>
-            <p><strong>Liability:</strong> {liab ? liab.toFixed(2) : "0.00"}</p>
-            <p style={profitIfBack >= 0 ? styles.profit : styles.loss}>
-              <strong>Profit if Back Wins:</strong> {profitIfBack ? profitIfBack.toFixed(2) : "0.00"}
-            </p>
-            <p style={profitIfLay >= 0 ? styles.profit : styles.loss}>
-              <strong>Profit if Lay Wins:</strong> {profitIfLay ? profitIfLay.toFixed(2) : "0.00"}
-            </p>
-            <p>The percentage return of this bet is... 
-              <span style={percentReturn >= 0 ? styles.profit : styles.loss}>
-                {" "}{percentReturn.toFixed(2)}%
-              </span>
-            </p>
-          </div>
-
-          <button style={styles.clearButton} onClick={() => {
-            setBackStake("");
-            setBackOdds("");
-            setLayOdds("");
-            setCommission(6);
-          }}>
-            Clear Fields
+    <div style={{ backgroundColor: "#0f172a", minHeight: "100vh", padding: "20px" }}>
+      <div style={styles.container}>
+        <div style={styles.tabBar}>
+          <button 
+            style={activeTab === "backLay" ? {...styles.tab, ...styles.activeTab} : styles.tab}
+            onClick={() => setActiveTab("backLay")}
+          >
+            Back/Lay
+          </button>
+          <button 
+            style={activeTab === "dutch" ? {...styles.tab, ...styles.activeTab} : styles.tab}
+            onClick={() => setActiveTab("dutch")}
+          >
+            Dutch Betting
+          </button>
+          <button 
+            style={activeTab === "threeWay" ? {...styles.tab, ...styles.activeTab} : styles.tab}
+            onClick={() => setActiveTab("threeWay")}
+          >
+            Three-Way Dutch
           </button>
         </div>
-      )}
 
-      {activeTab === "dutch" && (
-        <div style={styles.card}>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Total Stake</label>
-            <input 
-              type="number" 
-              value={dutchTotalStake} 
-              onChange={(e) => setDutchTotalStake(e.target.value)} 
-              style={styles.input}
-            />
-          </div>
+        {activeTab === "backLay" && (
+          <div style={styles.card}>
+            <div style={styles.tabBar}>
+              <button 
+                style={type === "qualifier" ? {...styles.tab, ...styles.activeTab} : styles.tab}
+                onClick={() => setType("qualifier")}
+              >
+                Mug / Qualifier
+              </button>
+              <button 
+                style={type === "snr" ? {...styles.tab, ...styles.activeTab} : styles.tab}
+                onClick={() => setType("snr")}
+              >
+                SNR Bonus
+              </button>
+              <button 
+                style={type === "sr" ? {...styles.tab, ...styles.activeTab} : styles.tab}
+                onClick={() => setType("sr")}
+              >
+                SR Bonus
+              </button>
+            </div>
 
-          <div style={styles.twoColumnGrid}>
-            <div>
-              <div style={{...styles.teamHeader, ...styles.teamA}}>Home Win</div>
-              
-              <div style={styles.checkboxContainer}>
-                <input 
-                  type="checkbox" 
-                  id="homeSNR"
-                  checked={homeSNR} 
-                  onChange={() => {
-                    setHomeSNR(!homeSNR);
-                    if (homeSNR !== !homeSNR && awaySNR) setAwaySNR(false);
-                  }}
-                  style={styles.checkbox}
-                />
-                <label htmlFor="homeSNR">SNR</label>
-              </div>
-              
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Odds</label>
-                <input 
-                  type="number" 
-                  value={homeOdds} 
-                  onChange={(e) => setHomeOdds(e.target.value)} 
-                  style={styles.input}
-                />
-              </div>
-              
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Stake</label>
-                <input 
-                  type="number" 
-                  value={homeStake} 
-                  onChange={(e) => setHomeStake(e.target.value)} 
-                  style={styles.input}
-                />
-              </div>
-              
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Back Stake</label>
+              <input 
+                type="number" 
+                value={backStake} 
+                onChange={(e) => setBackStake(e.target.value)} 
+                style={styles.input}
+              />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Back Odds</label>
+              <input 
+                type="number" 
+                value={backOdds} 
+                onChange={(e) => setBackOdds(e.target.value)} 
+                style={styles.input}
+              />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Lay Odds</label>
+              <input 
+                type="number" 
+                value={layOdds} 
+                onChange={(e) => setLayOdds(e.target.value)} 
+                style={styles.input}
+              />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Exchange Commission (%)</label>
+              <input 
+                type="number" 
+                value={commission} 
+                onChange={(e) => setCommission(e.target.value)} 
+                style={styles.input}
+              />
+            </div>
+
+            <div style={styles.resultCard}>
               <p>
-                <strong>Stake:</strong> {parseFloat(homeStake || 0).toFixed(2)}
+                <strong>Lay Stake:</strong> {lay ? lay.toFixed(2) : "0.00"}
                 <button style={styles.copyButton}><Copy size={16} /></button>
               </p>
-              
-              <p style={calculateDutchProfit("home") >= 0 ? styles.profit : styles.loss}>
-                <strong>Profit if Home Wins:</strong> {calculateDutchProfit("home").toFixed(2)}
+              <p><strong>Liability:</strong> {liab ? liab.toFixed(2) : "0.00"}</p>
+              <p style={profitIfBack >= 0 ? styles.profit : styles.loss}>
+                <strong>Profit if Back Wins:</strong> {profitIfBack ? profitIfBack.toFixed(2) : "0.00"}
+              </p>
+              <p style={profitIfLay >= 0 ? styles.profit : styles.loss}>
+                <strong>Profit if Lay Wins:</strong> {profitIfLay ? profitIfLay.toFixed(2) : "0.00"}
+              </p>
+              <p>The percentage return of this bet is... 
+                <span style={percentReturn >= 0 ? styles.profit : styles.loss}>
+                  {" "}{percentReturn.toFixed(2)}%
+                </span>
               </p>
             </div>
 
-            <div>
-              <div style={{...styles.teamHeader, ...styles.teamB}}>Away Win</div>
-              
-              <div style={styles.checkboxContainer}>
-                <input 
-                  type="checkbox" 
-                  id="awaySNR"
-                  checked={awaySNR} 
-                  onChange={() => {
-                    setAwaySNR(!awaySNR);
-                    if (awaySNR !== !awaySNR && homeSNR) setHomeSNR(false);
-                  }}
-                  style={styles.checkbox}
-                />
-                <label htmlFor="awaySNR">SNR</label>
-              </div>
-              
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Odds</label>
-                <input 
-                  type="number" 
-                  value={awayOdds} 
-                  onChange={(e) => setAwayOdds(e.target.value)} 
-                  style={styles.input}
-                />
-              </div>
-              
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Stake</label>
-                <input 
-                  type="number" 
-                  value={awayStake} 
-                  onChange={(e) => setAwayStake(e.target.value)} 
-                  style={styles.input}
-                />
-              </div>
-              
-              <p>
-                <strong>Stake:</strong> {parseFloat(awayStake || 0).toFixed(2)}
-                <button style={styles.copyButton}><Copy size={16} /></button>
-              </p>
-              
-              <p style={calculateDutchProfit("away") >= 0 ? styles.profit : styles.loss}>
-                <strong>Profit if Away Wins:</strong> {calculateDutchProfit("away").toFixed(2)}
-              </p>
-            </div>
-          </div>
-
-          <div style={styles.summary}>
-            <p><strong>Total Stake:</strong> {(parseFloat(homeStake || 0) + parseFloat(awayStake || 0)).toFixed(2)}</p>
-            <p style={{marginTop: "10px"}}><strong>Place these bets to lock in profit:</strong></p>
-            <p style={styles.profit}>${parseFloat(homeStake || 0).toFixed(2)} on Home at the best available odds.</p>
-            <p style={styles.profit}>${parseFloat(awayStake || 0).toFixed(2)} on Away at the best available odds.</p>
-          </div>
-
-          <div>
-            <button style={styles.optimizeButton} onClick={calculateProportionalStakes}>
-              Optimize Stakes
-            </button>
             <button style={styles.clearButton} onClick={() => {
-              setHomeStake("");
-              setAwayStake("");
-              setHomeOdds("");
-              setAwayOdds("");
-              setDutchTotalStake("");
-              setHomeSNR(false);
-              setAwaySNR(false);
+              setBackStake("");
+              setBackOdds("");
+              setLayOdds("");
+              setCommission(6);
             }}>
               Clear Fields
             </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {activeTab === "threeWay" && (
-        <div style={styles.card}>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Total Stake</label>
-            <input 
-              type="number" 
-              value={dutchTotalStake} 
-              onChange={(e) => setDutchTotalStake(e.target.value)} 
-              style={styles.input}
-            />
-          </div>
+        {activeTab === "dutch" && (
+          <div style={styles.card}>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Total Stake</label>
+              <input 
+                type="number" 
+                value={dutchTotalStake} 
+                onChange={(e) => setDutchTotalStake(e.target.value)} 
+                style={styles.input}
+              />
+            </div>
 
-          <div style={styles.threeColumnGrid}>
-            <div>
-              <div style={{...styles.teamHeader, ...styles.teamA}}>Home Win</div>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Odds</label>
-                <input 
-                  type="number" 
-                  value={homeOdds} 
-                  onChange={(e) => setHomeOdds(e.target.value)} 
-                  style={styles.input}
-                />
+            <div style={styles.twoColumnGrid}>
+              <div>
+                <div style={{...styles.teamHeader, ...styles.teamA}}>Home Win</div>
+                
+                <div style={styles.checkboxContainer}>
+                  <input 
+                    type="checkbox" 
+                    id="homeSNR"
+                    checked={homeSNR} 
+                    onChange={() => {
+                      setHomeSNR(!homeSNR);
+                      if (homeSNR !== !homeSNR && awaySNR) setAwaySNR(false);
+                    }}
+                    style={styles.checkbox}
+                  />
+                  <label htmlFor="homeSNR">SNR</label>
+                </div>
+                
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Odds</label>
+                  <input 
+                    type="number" 
+                    value={homeOdds} 
+                    onChange={(e) => setHomeOdds(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Stake</label>
+                  <input 
+                    type="number" 
+                    value={homeStake} 
+                    onChange={(e) => setHomeStake(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                
+                <p>
+                  <strong>Stake:</strong> {parseFloat(homeStake || 0).toFixed(2)}
+                  <button style={styles.copyButton}><Copy size={16} /></button>
+                </p>
+                
+                <p style={calculateDutchProfit("home") >= 0 ? styles.profit : styles.loss}>
+                  <strong>Profit if Home Wins:</strong> {calculateDutchProfit("home").toFixed(2)}
+                </p>
               </div>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Stake</label>
-                <input 
-                  type="number" 
-                  value={homeStake} 
-                  onChange={(e) => setHomeStake(e.target.value)} 
-                  style={styles.input}
-                />
+
+              <div>
+                <div style={{...styles.teamHeader, ...styles.teamB}}>Away Win</div>
+                
+                <div style={styles.checkboxContainer}>
+                  <input 
+                    type="checkbox" 
+                    id="awaySNR"
+                    checked={awaySNR} 
+                    onChange={() => {
+                      setAwaySNR(!awaySNR);
+                      if (awaySNR !== !awaySNR && homeSNR) setHomeSNR(false);
+                    }}
+                    style={styles.checkbox}
+                  />
+                  <label htmlFor="awaySNR">SNR</label>
+                </div>
+                
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Odds</label>
+                  <input 
+                    type="number" 
+                    value={awayOdds} 
+                    onChange={(e) => setAwayOdds(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Stake</label>
+                  <input 
+                    type="number" 
+                    value={awayStake} 
+                    onChange={(e) => setAwayStake(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                
+                <p>
+                  <strong>Stake:</strong> {parseFloat(awayStake || 0).toFixed(2)}
+                  <button style={styles.copyButton}><Copy size={16} /></button>
+                </p>
+                
+                <p style={calculateDutchProfit("away") >= 0 ? styles.profit : styles.loss}>
+                  <strong>Profit if Away Wins:</strong> {calculateDutchProfit("away").toFixed(2)}
+                </p>
               </div>
-              <p>
-                <strong>Stake:</strong> {parseFloat(homeStake || 0).toFixed(2)}
-                <button style={styles.copyButton}><Copy size={16} /></button>
-              </p>
-              <p style={calculateThreeWayProfit("home") >= 0 ? styles.profit : styles.loss}>
-                <strong>Profit if Home Wins:</strong> {calculateThreeWayProfit("home").toFixed(2)}
-              </p>
+            </div>
+
+            <div style={styles.summary}>
+              <p><strong>Total Stake:</strong> {(parseFloat(homeStake || 0) + parseFloat(awayStake || 0)).toFixed(2)}</p>
+              <p style={{marginTop: "10px"}}><strong>Place these bets to lock in profit:</strong></p>
+              <p style={styles.profit}>${parseFloat(homeStake || 0).toFixed(2)} on Home at the best available odds.</p>
+              <p style={styles.profit}>${parseFloat(awayStake || 0).toFixed(2)} on Away at the best available odds.</p>
             </div>
 
             <div>
-              <div style={{...styles.teamHeader, ...styles.draw}}>Draw</div>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Odds</label>
-                <input 
-                  type="number" 
-                  value={drawOdds} 
-                  onChange={(e) => setDrawOdds(e.target.value)} 
-                  style={styles.input}
-                />
+              <button style={styles.optimizeButton} onClick={calculateProportionalStakes}>
+                Optimize Stakes
+              </button>
+              <button style={styles.clearButton} onClick={() => {
+                setHomeStake("");
+                setAwayStake("");
+                setHomeOdds("");
+                setAwayOdds("");
+                setDutchTotalStake("");
+                setHomeSNR(false);
+                setAwaySNR(false);
+              }}>
+                Clear Fields
+              </button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "threeWay" && (
+          <div style={styles.card}>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Total Stake</label>
+              <input 
+                type="number" 
+                value={dutchTotalStake} 
+                onChange={(e) => setDutchTotalStake(e.target.value)} 
+                style={styles.input}
+              />
+            </div>
+
+            <div style={styles.threeColumnGrid}>
+              <div>
+                <div style={{...styles.teamHeader, ...styles.teamA}}>Home Win</div>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Odds</label>
+                  <input 
+                    type="number" 
+                    value={homeOdds} 
+                    onChange={(e) => setHomeOdds(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Stake</label>
+                  <input 
+                    type="number" 
+                    value={homeStake} 
+                    onChange={(e) => setHomeStake(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                <p>
+                  <strong>Stake:</strong> {parseFloat(homeStake || 0).toFixed(2)}
+                  <button style={styles.copyButton}><Copy size={16} /></button>
+                </p>
+                <p style={calculateThreeWayProfit("home") >= 0 ? styles.profit : styles.loss}>
+                  <strong>Profit if Home Wins:</strong> {calculateThreeWayProfit("home").toFixed(2)}
+                </p>
               </div>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Stake</label>
-                <input 
-                  type="number" 
-                  value={drawStake} 
-                  onChange={(e) => setDrawStake(e.target.value)} 
-                  style={styles.input}
-                />
+
+              <div>
+                <div style={{...styles.teamHeader, ...styles.draw}}>Draw</div>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Odds</label>
+                  <input 
+                    type="number" 
+                    value={drawOdds} 
+                    onChange={(e) => setDrawOdds(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Stake</label>
+                  <input 
+                    type="number" 
+                    value={drawStake} 
+                    onChange={(e) => setDrawStake(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                <p>
+                  <strong>Stake:</strong> {parseFloat(drawStake || 0).toFixed(2)}
+                  <button style={styles.copyButton}><Copy size={16} /></button>
+                </p>
+                <p style={calculateThreeWayProfit("draw") >= 0 ? styles.profit : styles.loss}>
+                  <strong>Profit if Draw:</strong> {calculateThreeWayProfit("draw").toFixed(2)}
+                </p>
               </div>
-              <p>
-                <strong>Stake:</strong> {parseFloat(drawStake || 0).toFixed(2)}
-                <button style={styles.copyButton}><Copy size={16} /></button>
-              </p>
-              <p style={calculateThreeWayProfit("draw") >= 0 ? styles.profit : styles.loss}>
-                <strong>Profit if Draw:</strong> {calculateThreeWayProfit("draw").toFixed(2)}
-              </p>
+
+              <div>
+                <div style={{...styles.teamHeader, ...styles.teamB}}>Away Win</div>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Odds</label>
+                  <input 
+                    type="number" 
+                    value={awayOdds} 
+                    onChange={(e) => setAwayOdds(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Stake</label>
+                  <input 
+                    type="number" 
+                    value={awayStake} 
+                    onChange={(e) => setAwayStake(e.target.value)} 
+                    style={styles.input}
+                  />
+                </div>
+                <p>
+                  <strong>Stake:</strong> {parseFloat(awayStake || 0).toFixed(2)}
+                  <button style={styles.copyButton}><Copy size={16} /></button>
+                </p>
+                <p style={calculateThreeWayProfit("away") >= 0 ? styles.profit : styles.loss}>
+                  <strong>Profit if Away Wins:</strong> {calculateThreeWayProfit("away").toFixed(2)}
+                </p>
+              </div>
+            </div>
+
+            <div style={styles.summary}>
+              <p><strong>Total Stake:</strong> {(parseFloat(homeStake || 0) + parseFloat(drawStake || 0) + parseFloat(awayStake || 0)).toFixed(2)}</p>
+              <p style={{marginTop: "10px"}}><strong>Place these bets to lock in profit:</strong></p>
+              <p style={styles.profit}>${parseFloat(homeStake || 0).toFixed(2)} on Home at the best available odds.</p>
+              <p style={styles.profit}>${parseFloat(drawStake || 0).toFixed(2)} on Draw at the best available odds.</p>
+              <p style={styles.profit}>${parseFloat(awayStake || 0).toFixed(2)} on Away at the best available odds.</p>
             </div>
 
             <div>
-              <div style={{...styles.teamHeader, ...styles.teamB}}>Away Win</div>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Odds</label>
-                <input 
-                  type="number" 
-                  value={awayOdds} 
-                  onChange={(e) => setAwayOdds(e.target.value)} 
-                  style={styles.input}
-                />
-              </div>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Stake</label>
-                <input 
-                  type="number" 
-                  value={awayStake} 
-                  onChange={(e) => setAwayStake(e.target.value)} 
-                  style={styles.input}
-                />
-              </div>
-              <p>
-                <strong>Stake:</strong> {parseFloat(awayStake || 0).toFixed(2)}
-                <button style={styles.copyButton}><Copy size={16} /></button>
-              </p>
-              <p style={calculateThreeWayProfit("away") >= 0 ? styles.profit : styles.loss}>
-                <strong>Profit if Away Wins:</strong> {calculateThreeWayProfit("away").toFixed(2)}
-              </p>
+              <button style={styles.optimizeButton} onClick={calculateProportionalStakes}>
+                Optimize Stakes
+              </button>
+              <button style={styles.clearButton} onClick={() => {
+                setHomeStake("");
+                setDrawStake("");
+                setAwayStake("");
+                setHomeOdds("");
+                setDrawOdds("");
+                setAwayOdds("");
+                setDutchTotalStake("");
+              }}>
+                Clear Fields
+              </button>
             </div>
           </div>
-
-          <div style={styles.summary}>
-            <p><strong>Total Stake:</strong> {(parseFloat(homeStake || 0) + parseFloat(drawStake || 0) + parseFloat(awayStake || 0)).toFixed(2)}</p>
-            <p style={{marginTop: "10px"}}><strong>Place these bets to lock in profit:</strong></p>
-            <p style={styles.profit}>${parseFloat(homeStake || 0).toFixed(2)} on Home at the best available odds.</p>
-            <p style={styles.profit}>${parseFloat(drawStake || 0).toFixed(2)} on Draw at the best available odds.</p>
-            <p style={styles.profit}>${parseFloat(awayStake || 0).toFixed(2)} on Away at the best available odds.</p>
-          </div>
-
-          <div>
-            <button style={styles.optimizeButton} onClick={calculateProportionalStakes}>
-              Optimize Stakes
-            </button>
-            <button style={styles.clearButton} onClick={() => {
-              setHomeStake("");
-              setDrawStake("");
-              setAwayStake("");
-              setHomeOdds("");
-              setDrawOdds("");
-              setAwayOdds("");
-              setDutchTotalStake("");
-            }}>
-              Clear Fields
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
